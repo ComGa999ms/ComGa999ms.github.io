@@ -1,70 +1,189 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nguyen Dang Khoa</title>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: white;
-            text-align: center;
-        }
-        .container {
-            width: 60%;
-            margin: 50px auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-        img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            margin-bottom: 20px;
-        }
-        h1 {
-            font-size: 2em;
-        }
-        p {
-            font-size: 18px;
-            line-height: 1.8;
-        }
-        .social-icons a {
-            text-decoration: none;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 12px 20px;
-            border-radius: 25px;
-            margin: 10px;
-            display: inline-block;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        .social-icons a:hover {
-            background: rgba(255, 255, 255, 0.4);
-            transform: scale(1.1);
-        }
-    </style>
+    <title>Nguyen Dang Khoa | Full-Stack & DevOps Profile</title>
+    <meta name="description" content="Personal profile of Nguyen Dang Khoa, focused on full-stack development, DevOps, and practical product delivery.">
+    <meta property="og:title" content="Nguyen Dang Khoa | Full-Stack & DevOps Profile">
+    <meta property="og:description" content="Projects, skills, roadmap, and contact details.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://comga999ms.github.io/assets/img/og-cover.webp">
+    <meta property="og:url" content="https://comga999ms.github.io/">
+    <meta name="theme-color" content="#0b1320">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='20' fill='%230b1320'/%3E%3Ctext x='60' y='77' font-size='62' text-anchor='middle' fill='%23f4d35e' font-family='Arial'%3EK%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-    <div class="container">
-        <img src="https://via.placeholder.com/150" alt="Ảnh đại diện">
-        <h1>Khoadeptrai</h1>
-        <p>Xin chào! Tôi là Khoa, một lập trình viên và DevOps đang học tập và làm việc tại Việt Nam. 
-           Tôi yêu thích công nghệ, sáng tạo nội dung và mong muốn mang đến những trải nghiệm tốt nhất cho người dùng.</p>
-        <div class="social-icons">
-            <a href="#">LinkedIn</a>
-            <a href="#">GitHub</a>
-            <a href="#">YouTube</a>
+    <header class="site-header" id="top">
+        <nav class="navbar container" aria-label="Primary navigation">
+            <a class="brand" href="#hero">Khoa.dev</a>
+            <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero section" id="hero">
+            <div class="hero-decor" aria-hidden="true"></div>
+            <div class="container hero-content reveal">
+                <div class="hero-avatar-wrap">
+                    <img class="hero-avatar" src="assets/img/profile.webp" alt="Portrait of Nguyen Dang Khoa" loading="eager">
+                </div>
+                <p class="eyebrow">Web Developer + DevOps Learner</p>
+                <h1>Nguyen Dang Khoa</h1>
+                <p class="tagline">I build practical web products and improve delivery with automation-first workflows.</p>
+                <div class="hero-cta">
+                    <a class="btn btn-primary" href="#projects">View Projects</a>
+                    <a class="btn btn-ghost" href="#contact">Contact Me</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="about">
+            <div class="container reveal">
+                <h2>About</h2>
+                <p>
+                    I am a developer from Vietnam focused on web engineering, deployment quality, and simple user-first interfaces.
+                    I enjoy breaking down complex tasks into clear deliverables and shipping in small, consistent iterations.
+                    My current focus is improving backend reliability, CI/CD confidence, and measurable product impact.
+                </p>
+                <div class="pill-row" role="list" aria-label="Values and work style">
+                    <span class="pill" role="listitem">Clear communication</span>
+                    <span class="pill" role="listitem">Ownership mindset</span>
+                    <span class="pill" role="listitem">Build small, iterate fast</span>
+                    <span class="pill" role="listitem">Automation first</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="skills">
+            <div class="container reveal">
+                <h2>Skills</h2>
+                <div class="grid skills-grid">
+                    <article class="card">
+                        <h3>Frontend</h3>
+                        <ul>
+                            <li>HTML, CSS, JavaScript <span>Advanced</span></li>
+                            <li>React basics <span>Intermediate</span></li>
+                            <li>Responsive UI systems <span>Advanced</span></li>
+                        </ul>
+                    </article>
+                    <article class="card">
+                        <h3>Backend</h3>
+                        <ul>
+                            <li>Node.js APIs <span>Intermediate</span></li>
+                            <li>Python scripting <span>Intermediate</span></li>
+                            <li>REST architecture <span>Intermediate</span></li>
+                        </ul>
+                    </article>
+                    <article class="card">
+                        <h3>DevOps</h3>
+                        <ul>
+                            <li>GitHub Actions <span>Intermediate</span></li>
+                            <li>Docker workflows <span>Intermediate</span></li>
+                            <li>Linux server setup <span>Beginner</span></li>
+                        </ul>
+                    </article>
+                    <article class="card">
+                        <h3>Tools</h3>
+                        <ul>
+                            <li>Git and GitHub <span>Advanced</span></li>
+                            <li>VS Code <span>Advanced</span></li>
+                            <li>Postman, Figma, Notion <span>Intermediate</span></li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="projects">
+            <div class="container reveal">
+                <h2>Highlighted Projects</h2>
+                <div class="grid projects-grid">
+                    <article class="card project-card">
+                        <h3>Portfolio Rebuild</h3>
+                        <p>One-page profile website optimized for GitHub Pages and mobile readability.</p>
+                        <p class="stack">HTML, CSS, JavaScript</p>
+                        <div class="links">
+                            <a href="https://comga999ms.github.io/" aria-label="Open demo of Portfolio Rebuild">Demo</a>
+                            <a href="https://github.com/ComGa999ms/ComGa999ms.github.io" aria-label="Open source code of Portfolio Rebuild">Source</a>
+                        </div>
+                    </article>
+                    <article class="card project-card">
+                        <h3>Task Tracker API</h3>
+                        <p>CRUD backend with auth-ready structure and clean endpoint design.</p>
+                        <p class="stack">Node.js, Express, MongoDB</p>
+                        <div class="links">
+                            <a href="https://github.com/ComGa999ms" aria-label="Open demo of Task Tracker API">Demo</a>
+                            <a href="https://github.com/ComGa999ms" aria-label="Open source code of Task Tracker API">Source</a>
+                        </div>
+                    </article>
+                    <article class="card project-card">
+                        <h3>CI Pipeline Starter</h3>
+                        <p>Reusable GitHub Actions pipeline with test, lint, and deploy stages.</p>
+                        <p class="stack">GitHub Actions, Docker</p>
+                        <div class="links">
+                            <a href="https://github.com/ComGa999ms" aria-label="Open demo of CI Pipeline Starter">Demo</a>
+                            <a href="https://github.com/ComGa999ms" aria-label="Open source code of CI Pipeline Starter">Source</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="roadmap">
+            <div class="container reveal">
+                <h2>Learning Roadmap</h2>
+                <div class="timeline">
+                    <article>
+                        <h3>Q2 2026</h3>
+                        <p>Complete 2 production-ready full-stack projects with deployment automation.</p>
+                    </article>
+                    <article>
+                        <h3>Q3 2026</h3>
+                        <p>Improve monitoring and logging skills with practical cloud service usage.</p>
+                    </article>
+                    <article>
+                        <h3>Q4 2026</h3>
+                        <p>Contribute to open source and document engineering practices publicly.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="contact">
+            <div class="container reveal">
+                <h2>Contact</h2>
+                <p>Open for collaboration, internship, and junior full-stack opportunities.</p>
+                <div class="contact-links">
+                    <a href="mailto:contact.comga999ms@gmail.com">Email</a>
+                    <a href="https://github.com/ComGa999ms" target="_blank" rel="noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/nguyendangkhoa-dev" target="_blank" rel="noreferrer">LinkedIn</a>
+                    <a href="https://www.youtube.com/@comga999ms" target="_blank" rel="noreferrer">YouTube</a>
+                </div>
+                <a class="btn btn-primary" href="mailto:contact.comga999ms@gmail.com">Request CV</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; <span id="year"></span> Nguyen Dang Khoa. Built for GitHub Pages.</p>
         </div>
-    </div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">Top</button>
+
+    <script src="assets/js/main.js" defer></script>
 </body>
 </html>
