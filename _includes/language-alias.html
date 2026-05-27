@@ -7,6 +7,8 @@
 {% assign _lang = include.language | default: '' %}
 
 {% case _lang %}
+  {% when 'c++', 'cpp', 'cc', 'cxx' %}
+    {{ 'C++' }}
   {% when 'actionscript', 'as', 'as3' %}
     {{ 'ActionScript' }}
   {% when 'applescript' %}
