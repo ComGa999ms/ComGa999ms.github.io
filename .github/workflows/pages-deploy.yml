@@ -47,6 +47,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build frontend assets
+        run: npm run build
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
