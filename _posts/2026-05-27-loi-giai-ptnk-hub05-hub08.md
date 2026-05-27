@@ -1,18 +1,46 @@
 ---
-title: "Lời giải đề thi thử PTNK 2026: HUB05 - HUB08"
-date: 2026-05-27 00:00:00 +0700
-categories: [Events, PTNK]
-tags: [ptnk, hub05, hub06, hub07, hub08, cpp, solution]
+title: "Lời giải đề thi thử tuyển sinh lớp 10 PTNK - Lần 2 - Năm 2026"
+date: 2026-05-27 14:31:00 +0700
+categories: [PTNK]
+tags: [ptnk, cp, solution] 
 ---
 
 Bài viết này ghi lại lời giải và code C++ cho bốn bài HUB05, HUB06, HUB07 và HUB08 trong đề thi thử tuyển sinh lớp 10 PTNK 2026.
 
-## HUB05 - Đèn Giáng Sinh
+# Đề thi thử tuyển sinh lớp 10 PTNK - Lần 2 - Năm 2026
+    
+## Bài 1: Đèn Giáng Sinh (2 điểm)
 
-Ta cần tìm một đoạn con sao cho đoạn đó là một hoa văn có độ dài `len` được lặp lại đúng `k` lần. Cách làm trực tiếp là duyệt vị trí bắt đầu `l`, duyệt độ dài hoa văn `len`, rồi kiểm tra `k` khối liên tiếp có giống nhau không.
+**Đề bài:** Cho dãy gồm $n$ bóng đèn, mỗi bóng có một màu được biểu diễn bởi một số nguyên. Cần cắt bỏ một số bóng ở đầu và cuối dãy, có thể không cắt, để phần còn lại có dạng một hoa văn màu sắc được lặp lại đúng $k$ lần liên tiếp. Nếu không thể tạo được dãy như vậy thì in ra $-1$.
 
-Nếu tìm được đoạn hợp lệ đầu tiên, in ra `len` và hoa văn tương ứng. Nếu không có đoạn nào thỏa mãn thì in `-1`.
+### Subtask 1: Hoa văn có độ dài
+- Hoa văn có độ dài 1 nghĩa là đoạn còn lại phải gồm $k$ bóng đèn liên tiếp có cùng màu.
+- Ta duyệt từng đoạn liên tiếp độ dài $k$ trong dãy.
+- Nếu trong đoạn đó mọi phần tử đều bằng nhau thì in ra độ dài hoa văn là $1$ và màu của bóng đèn đó.
+- Nếu không tìm được đoạn nào thỏa mãn thì in ra $-1$.
+- **Độ phức tạp:** $O(nk)$.
 
+### Subtask 2: $k = 2$
+- Khi $k = 2$, ta cần tìm một đoạn có dạng $X + X$, tức là nửa đầu và nửa sau giống hệt nhau.
+- Duyệt vị trí bắt đầu $l$ của đoạn.
+- Duyệt độ dài hoa văn $len$.
+- Khi đó đoạn cần xét là $[l, l + 2 × len - 1]$.
+- Kiểm tra với mọi $i$ từ $0$ đến $len - 1$, điều kiện $a_{l+i} = a_{l+len+i}$.
+- Nếu đúng, in ra $len$ và dãy màu từ $a_l$ đến $a_{l+len-1}$.
+- **Độ phức tạp:** $O(n^3)$.
+
+### Subtask 3: Không có ràng buộc thêm
+- Ta xử lý tổng quát cho mọi $k$.
+- Giả sử hoa văn có độ dài $len$, đoạn còn lại phải có độ dài $k × len$.
+- Duyệt vị trí bắt đầu $l$ và độ dài hoa văn $len$.
+- Nếu $l + k × len - 1 > n$ thì đoạn vượt khỏi dãy, bỏ qua.
+- Kiểm tra $k$ đoạn liên tiếp, mỗi đoạn dài $len$, có giống nhau hay không.
+- Cụ thể, với mọi $t$ từ $1$ đến $k-1$ và mọi $i$ từ $0$ đến $len-1$, cần có $a_{l+i} = a_{l+t × len+i}$.
+- Nếu tìm được đoạn hợp lệ, in ra độ dài hoa văn và hoa văn đó.
+- Nếu duyệt hết mà không có đáp án, in ra $-1$.
+- **Độ phức tạp:** $O(n^3)$.
+
+### Code mẫu
 ```cpp
 #include <bits/stdc++.h>
 #define int long long
@@ -53,7 +81,6 @@ void solve(void) {
             }
         }
     }
-
     cout << -1;
 }
 
@@ -69,11 +96,38 @@ signed main() {
 }
 ```
 
-## HUB06 - Vi khuẩn chia đôi
+## Bài 2: Vi khuẩn chia đôi (2 điểm)
 
-Ý tưởng là dựng xâu ban đầu bằng cách chia thành nhiều khối nhị phân có cùng độ dài. Ta chọn độ dài khối `block_len = 2^m` nhỏ nhất sao cho số khối `block_cnt = 2^(n-m)` không vượt quá số xâu nhị phân khác nhau có độ dài `block_len`.
+**Đề bài:** Ban đầu có một vi khuẩn có chuỗi ADN nhị phân độ dài $2^n$. Sau mỗi bước, mọi chuỗi hiện có được chia đôi thành hai chuỗi con bằng nhau. Cần tìm một xâu ban đầu sao cho tổng số loại ADN khác nhau xuất hiện trong toàn bộ quá trình là lớn nhất.
 
-Sau đó, với mỗi số từ `0` đến `block_cnt - 1`, viết nó thành chuỗi nhị phân đúng `block_len` bit rồi ghép lại. Cách dựng này tạo ra nhiều khối khác nhau nhất có thể ở mức đang xét.
+### Subtask 1: $n ≤ 4$
+- Với $n$ nhỏ, độ dài xâu ban đầu tối đa là $2^4 = 16$.
+- Có thể thử sinh nhiều xâu nhị phân và mô phỏng quá trình chia đôi.
+- Với mỗi xâu, ta đưa tất cả đoạn ADN xuất hiện trong quá trình chia vào một tập hợp.
+- Số phần tử của tập hợp chính là số loại ADN khác nhau.
+- Chọn xâu có số loại ADN khác nhau lớn nhất.
+- Cách này giúp hiểu bản chất bài toán, nhưng không dùng được cho giới hạn lớn hơn.
+- **Độ phức tạp:** $O(2^{2^n} \cdot 2^n)$.
+
+### Subtask 2: $n ≤ 10$
+- Ta bắt đầu dùng cách xây dựng thay vì thử tất cả xâu.
+- Chọn một độ dài khối $B = 2^m$.
+- Chia xâu ban đầu thành các khối độ dài $B$.
+- Số khối là $cnt = 2^{n-m}$.
+- Ta cần các khối này khác nhau, nên cần $cnt ≤ 2^B$.
+- Chọn $m$ nhỏ nhất thỏa mãn điều kiện trên.
+- Sau đó, với mỗi số từ $0$ đến $cnt-1$, viết nó dưới dạng nhị phân đúng $B$ bit và ghép lại thành xâu kết quả.
+- **Độ phức tạp:** $O(2^n)$.
+
+### Subtask 3: $n ≤ 20$
+- Ta dùng lại cách xây dựng ở subtask 2.
+- Vì độ dài xâu cần in là $2^n$, với $n ≤ 20$ thì độ dài lớn nhất là khoảng $10^6$, vẫn có thể in ra được.
+- Thuật toán: tìm $m$ nhỏ nhất sao cho $2^{n-m} ≤ 2^{2^m}$, đặt $B = 2^m$, $cnt = 2^{n-m}$, rồi với mỗi $i$ từ $0$ đến $cnt-1$, in biểu diễn nhị phân của $i$ trên đúng $B$ bit.
+- Cách xây dựng này làm cho ở mức khối độ dài $B$, các đoạn là khác nhau nhiều nhất có thể.
+- Các mức lớn hơn và nhỏ hơn cũng đạt được số lượng loại ADN tối đa tương ứng.
+- **Độ phức tạp:** $O(2^n)$.
+
+### Code mẫu
 
 ```cpp
 #include <bits/stdc++.h>
@@ -109,7 +163,6 @@ void solve(void) {
 
     string ans = "";
     rep(i, 0, block_cnt - 1) ans += bin(i, block_len);
-
     cout << ans;
 }
 
@@ -125,13 +178,44 @@ signed main() {
 }
 ```
 
-## HUB07 - Chuỗi số
+## Bài 3: Chuỗi số (3 điểm)
 
-Vì các giá trị trùng nhau trên bảng chỉ dùng được một lần, trước hết ta sort và xóa trùng. Gọi `need = m - s`, tức là số giá trị cũ cần xuất hiện trong dãy liên tiếp độ dài `m`.
+**Đề bài:** Trên bảng có $m$ số nguyên dương không vượt quá $n$. Người chơi cần chọn $m-s$ số trên bảng, sau đó tự thêm đúng $s$ số mới để tạo thành một dãy gồm $m$ số nguyên liên tiếp. Nếu một giá trị xuất hiện nhiều lần trên bảng thì vẫn chỉ được dùng một lần trong dãy. Hỏi có bao nhiêu dãy số khác nhau có thể tạo được.
 
-Mỗi nhóm `need` giá trị liên tiếp trong mảng đã nén sẽ tạo ra một khoảng vị trí bắt đầu hợp lệ `[L, R]`. Sau đó chỉ cần gộp các khoảng giao nhau hoặc kề nhau rồi cộng tổng độ dài.
+### Subtask 1: $n, m ≤ 100, s ≤ 10$
+- Với giới hạn nhỏ, ta có thể duyệt tất cả dãy liên tiếp độ dài $m$.
+- Một dãy liên tiếp độ dài $m$ có dạng $x, x+1, ..., x+m-1$.
+- Giá trị bắt đầu $x$ chạy từ $1$ đến $n-m+1$.
+- Với mỗi $x$, ta đếm xem trong đoạn $[x, x+m-1]$ có bao nhiêu giá trị khác nhau xuất hiện trên bảng.
+- Nếu số lượng này ít nhất là $m-s$, dãy đó tạo được.
+- **Độ phức tạp:** $O(nm)$.
 
-Trường hợp `need = 0`, mọi dãy liên tiếp độ dài `m` đều hợp lệ, đáp án là `n - m + 1`.
+### Subtask 2: $m ≤ 10^4$
+- Vì các số trùng nhau trên bảng chỉ được dùng một lần, trước tiên ta sort và xóa trùng.
+- Gọi các giá trị khác nhau sau khi nén là $a_1 < a_2 < ... < a_{cnt}$.
+- Đặt $need = m-s$.
+- Ta cần đếm số $x$ sao cho đoạn $[x, x+m-1]$ chứa ít nhất $need$ phần tử trong dãy $a$.
+- Xét từng nhóm gồm $need$ số liên tiếp trong dãy đã nén. Nếu nhóm đó là $a_i, a_{i+1}, ..., a_j$, với $j = i + need - 1$, thì các giá trị bắt đầu $x$ hợp lệ phải thỏa $a_j - m + 1 ≤ x ≤ a_i$.
+- Đồng thời, vì dãy phải nằm trong đoạn $[1,n]$, nên $1 ≤ x ≤ n-m+1$.
+- Do đó mỗi nhóm tạo ra một đoạn hợp lệ $L = \max(1, a_j - m + 1)$, $R = \min(a_i, n-m+1)$.
+- Nếu $L ≤ R$, ta lưu đoạn $[L,R]$.
+- Cuối cùng, gộp các đoạn giao nhau hoặc kề nhau để tính đáp án.
+- **Độ phức tạp:** $O(m \log m)$.
+
+### Subtask 3: $n ≤ 10^9, m ≤ 10^5$
+- Lúc này không thể duyệt mọi giá trị $x$ từ $1$ đến $n-m+1$, vì $n$ rất lớn.
+- Ta cần đếm theo các khoảng giá trị bắt đầu hợp lệ.
+- Sau khi nén các số trên bảng, xét một nhóm gồm $need$ số liên tiếp $a_i, a_{i+1}, ..., a_j$, với $j = i + need - 1$.
+- Để một dãy bắt đầu tại $x$ chứa toàn bộ nhóm này, ta cần $x ≤ a_i$ và $x+m-1 ≥ a_j$.
+- Suy ra $a_j - m + 1 ≤ x ≤ a_i$.
+- Đồng thời, vì dãy phải nằm trong đoạn $[1,n]$, nên $1 ≤ x ≤ n-m+1$.
+- Vậy mỗi nhóm tạo ra một đoạn giá trị bắt đầu hợp lệ: $L = \max(1, a_j - m + 1)$, $R = \min(a_i, n-m+1)$.
+- Nếu $L ≤ R$, ta lưu đoạn $[L,R]$.
+- Cuối cùng, gộp các đoạn giao nhau hoặc kề nhau, tổng độ dài sau khi gộp chính là đáp án.
+- Trường hợp $need = 0$, mọi dãy liên tiếp độ dài $m$ đều hợp lệ, đáp án là $n-m+1$.
+- **Độ phức tạp:** $O(m \log m)$.
+
+### Code mẫu
 
 ```cpp
 #include <bits/stdc++.h>
@@ -152,7 +236,6 @@ int L[N], R[N];
 
 void solve(void) {
     cin >> n >> m >> s;
-
     vector<int> v;
 
     rep(i, 1, m) {
@@ -175,10 +258,8 @@ void solve(void) {
     }
 
     int dem = 0;
-
     rep(i, 1, cnt - need + 1) {
         int j = i + need - 1;
-
         int l = max(1LL, a[j] - m + 1);
         int r = min(a[i], lastStart);
 
@@ -190,7 +271,6 @@ void solve(void) {
     }
 
     int ans = 0;
-
     if (dem == 0) {
         cout << 0;
         return;
@@ -203,13 +283,10 @@ void solve(void) {
             ans += curR - curL + 1;
             curL = L[i];
             curR = R[i];
-        } else {
-            curR = max(curR, R[i]);
-        }
+        } else curR = max(curR, R[i]);
     }
 
     ans += curR - curL + 1;
-
     cout << ans;
 }
 
@@ -221,17 +298,64 @@ signed main() {
     freopen(task".out", "w", stdout);
 
     solve();
-
     return 0;
 }
 ```
 
-## HUB08 - Mã hoán vị
+## Bài 4: Mã hoán vị (3 điểm)
 
-Ta cần biến xâu độ dài `2n` thành dạng `T + T` bằng số phép đổi chỗ hai kí tự liên tiếp ít nhất. Với mỗi chữ cái, lưu toàn bộ vị trí xuất hiện của nó. Nếu một chữ cái xuất hiện `cnt` lần, ghép nửa đầu danh sách vị trí với nửa sau danh sách vị trí.
+**Đề bài:** Cho một xâu $S$ có độ dài $2n$. Mỗi phép biến đổi được chọn hai kí tự liên tiếp bất kỳ và đổi chỗ chúng. Cần tìm số phép biến đổi ít nhất để đưa $S$ về dạng lặp đôi, tức là xâu có dạng $T + T$ với một xâu $T$ độ dài $n$ nào đó.
 
-Sau khi có các cặp, sort theo vị trí đầu tiên. Cặp thứ `i` sẽ đi tới hai vị trí đích `i + 1` và `n + i + 1`. Khi đó bài toán trở thành đếm số nghịch thế của mảng vị trí đích, dùng Fenwick Tree để tính nhanh.
+### Subtask 1: Xâu gồm $n$ kí tự `a` rồi $n$ kí tự `b` hoặc ngược lại
+- Xâu chỉ gồm hai khối kí tự giống nhau.
+- Đích cần có dạng $T+T$, nên số lượng mỗi loại kí tự ở nửa đầu và nửa sau phải giống nhau.
+- Do dữ liệu đảm bảo có lời giải, trong trường hợp này $n$ phải là số chẵn.
+- Nếu xâu ban đầu là $a^n b^n$, ta cần đưa một nửa số kí tự `b` lên nửa đầu, hoặc tương đương đưa một nửa số kí tự `a` xuống nửa sau.
+- Xâu đích có thể có dạng $a^{\frac n2}b^{\frac n2}a^{\frac n2}b^{\frac n2}$.
+- Số phép đổi chỗ hai kí tự liên tiếp ít nhất chính là số cặp kí tự bị đảo thứ tự giữa phần cần chuyển.
+- **Độ phức tạp:** $O(n)$.
 
+### Subtask 2: Mỗi chữ cái xuất hiện đúng 2 lần, $n ≤ 26$
+- Mỗi chữ cái xuất hiện đúng 2 lần nên mỗi chữ cái tự tạo thành một cặp.
+- Ta cần đưa một lần xuất hiện của chữ cái đó vào nửa đầu, lần còn lại vào vị trí tương ứng ở nửa sau.
+- Lưu hai vị trí xuất hiện của từng chữ cái.
+- Sắp xếp các cặp theo vị trí xuất hiện đầu tiên.
+- Cặp thứ $i$ sẽ được đưa về hai vị trí $i$ và $i+n$.
+- Sau đó bài toán trở thành đếm số nghịch thế của mảng vị trí đích.
+- Vì $n ≤ 26$, có thể đếm nghịch thế bằng hai vòng lặp.
+- **Độ phức tạp:** $O(n^2)$.
+
+### Subtask 3: Nửa đầu và nửa sau của xâu là hai hoán vị của nhau
+- Vì hai nửa là hai hoán vị của nhau, mỗi kí tự trong nửa đầu có thể ghép với một kí tự giống nó ở nửa sau.
+- Ta giữ thứ tự các kí tự ở nửa đầu.
+- Với mỗi kí tự ở nửa đầu, chọn lần xuất hiện tương ứng sớm nhất của kí tự đó ở nửa sau.
+- Khi đó, ta chỉ cần sắp xếp lại nửa sau sao cho khớp với nửa đầu.
+- Số phép đổi chỗ ít nhất chính là số nghịch thế của thứ tự các vị trí được chọn trong nửa sau.
+- Có thể dùng Fenwick Tree để đếm nghịch thế.
+- **Độ phức tạp:** $O(n \log n)$.
+
+### Subtask 4: $1 ≤ n ≤ 1000$
+- Với $n$ nhỏ hơn, ta có thể dùng lời giải tổng quát nhưng đếm nghịch thế bằng hai vòng lặp.
+- Với mỗi chữ cái, lưu tất cả vị trí xuất hiện của nó.
+- Nếu một chữ cái xuất hiện $cnt$ lần, ta ghép vị trí thứ $i$ trong danh sách với vị trí thứ $i + \frac{cnt}{2}$, với $1 ≤ i ≤ \frac{cnt}{2}$.
+- Sau khi có các cặp, sắp xếp các cặp theo vị trí đầu tiên.
+- Gán cặp thứ $i$ vào hai vị trí đích $i$ và $i+n$.
+- Tạo mảng $target$, trong đó $target_p$ là vị trí đích của kí tự ở vị trí $p$ ban đầu.
+- Đáp án là số nghịch thế của mảng $target$.
+- Với $2n ≤ 2000$, có thể đếm nghịch thế bằng hai vòng lặp.
+- **Độ phức tạp:** $O(n^2)$.
+
+### Subtask 5: Không có ràng buộc thêm
+- Ta tối ưu subtask 4 bằng Fenwick Tree.
+- Với mỗi chữ cái, lưu lại toàn bộ vị trí xuất hiện trong xâu.
+- Với một chữ cái xuất hiện $cnt$ lần, ta ghép vị trí thứ $i$ trong danh sách với vị trí thứ $i + \frac{cnt}{2}$, với $1 ≤ i ≤ \frac{cnt}{2}$.
+- Sau khi tạo toàn bộ cặp, sắp xếp các cặp theo vị trí đầu tiên.
+- Cặp thứ $i$ sẽ được đưa về hai vị trí đích $i$ và $i+n$.
+- Với mỗi vị trí ban đầu, ta biết nó cần đi tới vị trí đích nào.
+- Số phép đổi chỗ hai kí tự liên tiếp ít nhất bằng số nghịch thế của dãy vị trí đích.
+- Dùng Fenwick Tree để đếm nghịch thế: $ans += (i-1) - get(target_i)$, trong đó $get(x)$ là số phần tử đã xuất hiện có vị trí đích không vượt quá $x$.
+- **Độ phức tạp:** $O(n \log n)$.
+### Code mẫu
 ```cpp
 #include <bits/stdc++.h>
 #define int long long
@@ -267,12 +391,9 @@ void solve(void) {
     int len = 2 * n;
     s = " " + s;
 
-    rep(i, 1, len) {
-        pos[s[i] - 'a'].pb(i);
-    }
+    rep(i, 1, len) pos[s[i] - 'a'].pb(i);
 
     vector<pii> pairs;
-
     rep(c, 0, 25) {
         int cnt = sz(pos[c]);
         int half = cnt / 2;
@@ -283,7 +404,6 @@ void solve(void) {
     }
 
     sort(pairs.begin(), pairs.end());
-
     vector<int> target(len + 1);
 
     rep(i, 0, n - 1) {
@@ -295,12 +415,10 @@ void solve(void) {
     }
 
     int ans = 0;
-
     rep(i, 1, len) {
         ans += i - 1 - get(target[i]);
         update(target[i], 1);
     }
-
     cout << ans;
 }
 
@@ -315,14 +433,3 @@ signed main() {
     return 0;
 }
 ```
-
-## Tổng kết
-
-Bốn bài trên có thể gom lại thành vài ý chính:
-
-- HUB05: duyệt đoạn và kiểm tra hoa văn lặp.
-- HUB06: dựng xâu bằng các khối nhị phân phân biệt.
-- HUB07: nén giá trị, tạo khoảng hợp lệ, rồi gộp khoảng.
-- HUB08: quy về đếm nghịch thế bằng Fenwick Tree.
-
-Đây là một bộ bài khá tốt để luyện tư duy duyệt, dựng cấu hình, xử lý khoảng và đếm nghịch thế.
