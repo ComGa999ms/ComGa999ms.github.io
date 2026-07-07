@@ -12,7 +12,7 @@ image:
 Đang trong thời gian nghỉ hè nên là mình có đánh giải No Hack No CTF 2026 cùng với một người bạn nữa để giải trí và học hỏi thêm thì dưới đây là write up các bài mình đã giải được.
 
 ## newbie-crypto
-![alt text](no-hack-no-ctf-1.png)
+![alt text](/assets/img/posts/no-hack-no-ctf-1.png)
 
 ```python
 from Crypto.Cipher import AES
@@ -169,7 +169,7 @@ print(admin_plaintext.decode())
 => Flag: ```NHNC{c7r_k3y57r34m5_5h0uld_n3v3r_r37urn}```
 
 ## Final Boarding
-![alt text](no-hack-no-ctf-2.png)
+![alt text](/assets/img/posts/no-hack-no-ctf-2.png)
 
 Đầu tiên thì bài này là một bài osint, mình phải tìm được 2 thứ là:
 
@@ -179,13 +179,13 @@ print(admin_plaintext.decode())
 ### Date the photo 
 Đầu tiên thì trong đề có ghi là "That day in Japan marked the end of Golden Week" thì đây là một ngày tuần lễ vàng người dân Japan được nghỉ để nghĩ dưỡng các thứ. Ngày này rơi vào cuối tháng 4 đến đầu tháng 5. 
 
-![alt text](Final-Boarding-1.png)
+![alt text](/assets/img/posts/Final-Boarding-1.png)
 
 Nhưng trong bài này khả năng cao là đầu tháng 5 vì nó ghi là "End of Golden Week".
 
 Để biết chính xác thì mình xem metadata của tấm hình đề cho 
 
-![alt text](Final-Boarding-2.png)
+![alt text](/assets/img/posts/Final-Boarding-2.png)
 
 Ta thấy +09:00 là múi giờ Nhật Bản, nên thời gian này là giờ địa phương tại Nhật và thời gian này cũng khớp so với thời gian Golden Week thực tế.
 
@@ -195,11 +195,11 @@ Ta thấy +09:00 là múi giờ Nhật Bản, nên thời gian này là giờ đ
 
 Nhìn vào tấm hình thì có thể thấy đuôi máy bay là của hãng Jetstar Japan số hiệu A320 và bên cạnh đó là registration của aircraft là JA06JJ.
 
-![alt text](Final-Boarding-3.png)
+![alt text](/assets/img/posts/Final-Boarding-3.png)
 
 Đề nói người chụp đang đứng trước boarding gate tại Nhật mà ở Nhật có hơn khoảng 55 sân bay nên đầu tiên phải xác định được sân bay nằm ở ga nào thì với các thông tin như mã số, loại máy bay thì mình search được lịch bay của chiếc máy bay này. 
 
-![alt text](Final-Boarding-4.png)
+![alt text](/assets/img/posts/Final-Boarding-4.png)
 
 Nhìn vào bảng thì mình thấy cái khớp nhất là GK55 vì 14:49 JST tức khoảng 40 phút trước khi bay thì người này đã đứng chụp tấm ảnh này. 
 
