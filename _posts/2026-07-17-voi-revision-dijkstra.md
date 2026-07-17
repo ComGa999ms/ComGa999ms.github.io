@@ -283,7 +283,208 @@ signed main() {
 
 ### Tóm tắt
 
+Cho đồ thị vô hướng gồm $n$ thành phố, $m$ con đường. Mỗi con đường có độ dài bằng $1$. Có $k$ dự án nhà máy điện, dự án thứ $i$ đặt nhà máy tại thành phố $p_i$ và có thể cung cấp điện cho các thành phố cách nó không quá $r_i$ cạnh.
+
+In ra xâu nhị phân độ dài $n$, ký tự thứ $i$ là $1$ nếu thành phố $i$ được cấp điện, ngược lại in $0$. Với $1 \le n, m \le 2 \cdot 10^5$, $0 \le k \le 5 \cdot 10^5$.
 
 ### Ý tưởng
 
+Bài này thì không thể BFS từng nhà máy vì số nhà máy nhiều và sẽ bị TLE.
+
+Ý tưởng bài này thì xem bán kính $r_i$ là trọng số ban đầu của nhà máy. Mỗi lần đi qua một cạnh thì trọng số giảm $1$. Bài này dijkstra từ các nhà máy và duy trì luôn xét thành phố đang có trọng số còn lại lớn nhất. Gọi $P_u$ là lượng trọng số lớn nhất còn lại khi có thể đi tới thành phố $u$.
+
+- Ban đầu với mỗi dự án $(p_i, r_i)$, gán $P_{p_i} = \max(P_{p_i}, r_i)$.
+
+- Khi từ $u$ sang đỉnh kề $v$, trọng số còn lại là $P_u - 1$.
+
+- Nếu $P_u - 1 > P_v$ thì cập nhật $P_v$ và đưa $v$ lại vào dijkstra tiếp.
+
+Cuối cùng thì thành phố $i$ được cấp điện khi $P_i \ge 0$.
+
 ### Code AC
+
+```cpp
+#include <bits/stdc++.h>
+#define pii pair <int, int>
+#define p2i pair <int, pii>
+#define int long long
+#define fi first
+#define se second
+#define endl "\n"
+
+using namespace std;
+
+const int N = 1e6 + 5;
+const int mod = 1e9 + 7;
+const int inf = 1e18 + 7;
+
+int n, m, k;
+vector <int> adj[N];
+int P[N];
+
+void solve() {
+    cin >> n >> m >> k;
+    for (int i = 1; i <= m; ++i) {
+        int u, v;
+        cin >> u >> v;
+
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    for (int i = 1; i <= n; ++i) P[i] = -1;
+
+    priority_queue<pii> q;
+    for (int i = 1; i <= k; ++i) {
+        int p, r;
+        cin >> p >> r;
+
+        if (r > P[p]) {
+            P[p] = r;
+            q.push(pii(r, p));
+        }
+    }
+
+    while (q.size()) {
+        int cur = q.top().fi, u = q.top().se;
+        q.pop();
+
+        if (cur > P[u] || cur == 0) continue;
+        for (int v : adj[u]) {
+            if (P[v] < cur - 1) {
+                P[v] = cur - 1;
+                q.push(pii(P[v], v));
+            }
+        }
+    }
+
+    for (int i = 1; i <= n; ++i) {
+        if (P[i] >= 0) cout << 1;
+        else cout << 0;
+    }
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    solve();
+    return 0;
+}
+```
+
+## Tunnel
+
+### Tóm tắt
+
+Cho đồ thị vô hướng có trọng số. Buổi sáng Aaron đi từ $A$ đến $B$ theo một đường đi có tổng chi phí nhỏ nhất và kích hoạt các cạnh trên đường đi đó. Buổi chiều Hasun đi từ $C$ đến $D$. Những cạnh Aaron đã kích hoạt thì Hasun đi qua miễn phí, các cạnh khác vẫn phải trả chi phí.
+
+Tìm chi phí nhỏ nhất Hasun cần trả. Với $2 \le n \le 10^5$, $1 \le m \le 2 \cdot 10^5$.
+
+
+### Ý tưởng
+
+Bài này đầu tiên là dijkstra từ $A, B, C, D$ để có các mảng $d_{i}$ tương ứng. Ta có nhận xét là một cạnh $u \to v$ nằm trên một đường đi ngắn nhất từ $A$ đến $B$ khi:
+$$
+d_{A}​[u] + w(u, v) + d_{B}​[v] = d_{A}​[B]
+$$
+Các cạnh thỏa điều kiện này tạo thành DAG theo thứ tự tăng của $d_A$. Gọi $f_v$ là chi phí nhỏ nhất để đi từ $C$ tới một đỉnh nào đó trên đường ngắn nhất, sau đó đi miễn phí theo các cạnh đã kích hoạt để tới $v$.
+
+- Ban đầu: $f_v = d_C[v]$.
+
+- Với cạnh $u \to v$ thuộc DAG: $f_{v} ​ = min(f_{v}​,f_{u}​)$
+
+Khi đang ở $v$ thì Hasun có thể đi tiếp tới $D$ với chi phí $d_D[v]$, nên xét $f_{v} + d_{D}[v]$. Cần làm thêm chiều ngược lại, vì Hasun có thể đi miễn phí ngược hướng với đường Aaron đi. Tức là đổi vai trò $C$ và $D$ rồi tính tương tự.
+
+### Code AC
+
+```cpp
+#include <bits/stdc++.h>
+#define pii pair <int, int>
+#define p2i pair <int, pii>
+#define int long long
+#define fi first
+#define se second
+#define endl "\n"
+
+using namespace std;
+
+const int N = 1e6 + 5;
+const int mod = 1e9 + 7;
+const int inf = 1e18 + 7;
+
+int n, m;
+int A, B, C, D;
+
+vector<pii> adj[N];
+
+int dA[N], dB[N], dC[N], dD[N];
+int f[N], g[N];
+
+void dijk(int s, int d[]) {
+    for (int i = 1; i <= n; ++i) d[i] = inf;
+    priority_queue<pii, vector<pii>, greater<pii>> q;
+    d[s] = 0;
+    q.push(pii(0, s));
+
+    while (q.size()) {
+        int du = q.top().fi, u = q.top().se;
+        q.pop();
+
+        if (du > d[u]) continue;
+        for (auto [v, uv] : adj[u]) {
+            if (d[v] > d[u] + uv) {
+                d[v] = d[u] + uv;
+                q.push(pii(d[v], v));
+            }
+        }
+    }
+}
+
+void solve() {
+    cin >> n >> m >> A >> B >> C >> D;
+
+    for (int i = 1; i <= m; ++i) {
+        int u, v, w;
+        cin >> u >> v >> w;
+        adj[u].push_back(pii(v, w));
+        adj[v].push_back(pii(u, w));
+    }
+
+    dijk(A, dA);
+    dijk(B, dB);
+    dijk(C, dC);
+    dijk(D, dD);
+
+    vector <int> ord;
+    for (int i = 1; i <= n; ++i) {
+        ord.push_back(i);
+        f[i] = dC[i];
+        g[i] = dD[i];
+    }
+
+    sort(ord.begin(), ord.end(), [&](int u, int v) {
+        return dA[u] < dA[v];
+    });
+
+    int ans = dC[D];
+    for (int u : ord) {
+        ans = min(ans, f[u] + dD[u]);
+        ans = min(ans, g[u] + dC[u]);
+
+        for (auto [v, c] : adj[u]) {
+            // u -> v nam tren duong di ngan nhat A -> B
+            if (dA[u] + c + dB[v] == dA[B]) {
+                f[v] = min(f[v], f[u]);
+                g[v] = min(g[v], g[u]);
+            }
+        }
+    }
+
+    cout << ans;
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    solve();
+    return 0;
+}
+```
