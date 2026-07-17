@@ -7,6 +7,7 @@ math: true
 image:
   path: /assets/img/posts/voi-revision-dijkstra.png
   alt: VOI Revision - Dijkstra
+  fit: contain
 ---
 
 Link contest: [https://oj.vnoi.info/contest/vr_dijkstra](https://oj.vnoi.info/contest/vr_dijkstra)

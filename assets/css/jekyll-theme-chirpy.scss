@@ -9,3 +9,9 @@
 ';
 
 /* append your custom style below */
+
+.preview-img.fit-contain,
+.preview-img > img.fit-contain {
+  object-fit: contain;
+  background-color: #fff;
+}
