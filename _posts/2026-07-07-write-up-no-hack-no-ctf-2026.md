@@ -651,13 +651,13 @@ original_i = C_i \times (A^n)^{-1}
 $$
 
 Gọi:
-$
+$$
 M = A^n =
 \begin{bmatrix}
 p & q \\
 r & s
 \end{bmatrix}
-$
+$$
 
 Khi đó:
 $
@@ -665,14 +665,14 @@ det = p \times s - q \times r
 $
 
 và:
-$
+$$
 M^{-1} =
 \frac{1}{det}
 \begin{bmatrix}
 s & -q \\
 -r & p
 \end{bmatrix}
-$
+$$
 
 Từ mỗi vector trong C, ta nhân với $M^{-1}$ để recover lại ký tự tương ứng của chuỗi T, sau đó gửi T cho chương trình để lấy flag.
 
