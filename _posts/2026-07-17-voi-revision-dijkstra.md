@@ -6,7 +6,7 @@ tags: [cp, graph, dijkstra]
 math: true
 image:
   path: /assets/img/posts/voi-revision-dijkstra.png
-  alt: VOI Revision
+  alt: VOI Revision - Dijkstra
 ---
 
 Link contest: [https://oj.vnoi.info/contest/vr_dijkstra](https://oj.vnoi.info/contest/vr_dijkstra)
