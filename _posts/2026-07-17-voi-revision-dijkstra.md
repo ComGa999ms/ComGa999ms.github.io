@@ -5,7 +5,7 @@ categories: [Competitive Programing, VOI Revision - Dijkstra]
 tags: [cp, graph, dijkstra]
 math: true
 image:
-  path: /assets/img/posts/no-hack-no-ctf-2026/voi-revision-dijkstra.png
+  path: /assets/img/posts/voi-revision-dijkstra.png
   alt: VOI Revision
 ---
 
