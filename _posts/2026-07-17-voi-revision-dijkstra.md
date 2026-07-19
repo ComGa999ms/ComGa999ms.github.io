@@ -10,7 +10,14 @@ image:
   fit: contain
 ---
 
-Link contest: [https://oj.vnoi.info/contest/vr_dijkstra](https://oj.vnoi.info/contest/vr_dijkstra)
+Hồi còn đi học tuyển thì mình học cũng không giỏi phần độ thị lắm nhưng riêng cái phần dijkstra này thì mình khá thích =))) Mà bữa mình thấy trên vnoi có ra cái revision về chủ đề này mà chưa có solution cụ thể cho từng bài nên mình viết blog này để mọi người đọc vui vẻ. 
+
+
+Trước khi đọc thì dưới đây là các link liên quan:
+
+- Link Lý thuyết: [https://cp-algorithms.com/graph/dijkstra.html](https://cp-algorithms.com/graph/dijkstra.html)
+
+- Link contest: [https://oj.vnoi.info/contest/vr_dijkstra](https://oj.vnoi.info/contest/vr_dijkstra)
 
 ## SGraph
 
@@ -383,7 +390,11 @@ Tìm chi phí nhỏ nhất Hasun cần trả. Với $2 \le n \le 10^5$, $1 \le m
 
 ### Ý tưởng
 
-Bài này đầu tiên là dijkstra từ $A, B, C, D$ để có các mảng $d_{i}$ tương ứng. Ta có nhận xét là một cạnh $u \to v$ nằm trên một đường đi ngắn nhất từ $A$ đến $B$ khi:
+Ý tưởng bài này lúc mới đọc vào thì nhiều bạn có thể suy nghĩ đơn giản là cứ dijkstra từ $A \to B$ xong trace lại đường đi ngắn nhất rồi build lại đồ thị với các cạnh trace đó có trọng số là 0. Xong dijkstra 1 lần nữa từ $C$ để lấy đáp án. 
+
+Tuy nhiên nếu làm như thế nó chỉ đúng khi và chỉ khi đồ thị có đúng một đường đi ngắn nhất từ $A \to B$ thôi. Nó sẽ sai nếu có nhiều hơn 1 đường đi. Kiểu trace như thế thì bạn sẽ auto pick 1 đường đi để free trông khi đáp án thật thì phải dùng lượt free của đường đi thú 2 tối ưu hơn. 
+
+Để giải bài này đầu tiên là dijkstra từ $A, B, C, D$ để có các mảng $d_{i}$ tương ứng. Ta có nhận xét là một cạnh $u \to v$ nằm trên một đường đi ngắn nhất từ $A$ đến $B$ khi:
 $$
 d_{A}​[u] + w(u, v) + d_{B}​[v] = d_{A}​[B]
 $$
@@ -481,6 +492,339 @@ void solve() {
     }
 
     cout << ans;
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    solve();
+    return 0;
+}
+```
+## Cessla
+
+### Tóm tắt 
+
+Cho đồ thị vô hướng gồm $N$ điểm, $M$ cạnh có trọng số. $C$ điểm đầu tiên là các trạm sạc, các điểm từ $C + 1$ tới $N$ là điểm du lịch. Xe điện đi được tối đa $2R$ trong một lần sạc, nên một điểm du lịch có thể đi và quay về từ một trạm sạc nếu khoảng cách ngắn nhất từ trạm đó tới điểm du lịch không quá $R$. Một điểm du lịch được xem là có kết nối tốt nếu có ít nhất $K$ trạm sạc khác nhau có thể tới nó với khoảng cách không quá $R$.
+
+Hãy in ra số lượng và danh sách các điểm du lịch có kết nối tốt theo thứ tự tăng dần. Với $2 \le N \le 5 \cdot 10^4$, $1 \le M \le 10^5$, $1 \le K \le 10$.
+
+### Ý tưởng
+
+Bài này thì nhìn vào $K$ khá bé nên là mình nghĩ đơn giản bài này là multi source với source là các trạm. Với mỗi trạng thái trong lúc dijkstra thì mình lưu là $(dis, (cur_u, source))$ với $dis, cur_u$ là khoảng cách và đỉnh hiện tại đang xết, còn $source$ là cái trạm mình bắt đầu dijkstra.
+
+Trong lúc dijkstra thì sẽ có một vài điều kiện như là:
+
+- Nếu khoảng cách lớn hơn $R$ thì dừng
+
+- Nếu trạm sạc này đã từng tới đỉnh hiện tại thì bỏ qua.
+
+- Nếu đỉnh hiện tại đã có đủ $K$ trạm sạc thì bỏ qua.
+
+Sau khi dijkstra xong thì chỉ cần duyệt xem cái nào có $≥ K $ trạm thì in ra thui.
+### Code AC
+
+```cpp
+#include <bits/stdc++.h>
+#define pii pair <int, int>
+#define p2i pair <int, pii>
+#define int long long
+#define fi first
+#define se second
+#define endl "\n"
+
+using namespace std;
+
+const int N = 1e6 + 5;
+const int mod = 1e9 + 7;
+const int inf = 1e18 + 7;
+
+int n, m, C, R, K;
+vector <pii> adj[N];
+vector <int> save[N];
+
+void solve() {
+    cin >> n >> m >> C >> R >> K;
+    for (int i = 1; i <= m; ++i) {
+        int u, v, w;
+        cin >> u >> v >> w;
+
+        adj[u].push_back(pii(v, w));
+        adj[v].push_back(pii(u, w));
+    }
+
+    // {dis, {cur_u, source}}
+    priority_queue<p2i, vector<p2i>, greater<p2i>> q;
+    for (int i = 1; i <= C; ++i) q.push(p2i(0, pii(i, i)));
+    
+    while (q.size()) {
+        int du = q.top().fi, u = q.top().se.fi, source = q.top().se.se;
+        q.pop();
+
+        if (du > R) break;
+
+        bool ok = false;
+        for (int v : save[u]) {
+            if (v == source) {
+                ok = 1;
+                break;
+            }
+        }
+
+        if (ok) continue;
+        if (save[u].size() == K) continue;
+
+        save[u].push_back(source);
+
+        for (auto [v, c] : adj[u]) {
+            q.push(p2i(du + c, pii(v, source)));
+        }
+    }
+
+    vector <int> res;
+    for (int i = C + 1; i <= n; ++i) {
+        if (save[i].size() >= K) res.push_back(i);
+    }
+
+    cout << res.size() << endl;
+    for (int v : res) cout << v << " ";
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    solve();
+    return 0;
+}
+```
+
+## Bedao Regular Contest 19 - Chênh lệch lớn nhất
+
+### Tóm tắt
+
+Cho đồ thị vô hướng gồm $N$ đỉnh, $M$ cạnh. Mỗi cạnh có độ dài $w$ và độ cao $c$. Tìm đường đi từ đỉnh $1$ tới đỉnh $N$ có tổng độ dài ngắn nhất. Trong các đường đi ngắn nhất đó, tìm đường có chênh lệch lớn nhất giữa độ cao cạnh cao nhất và độ cao cạnh thấp nhất.
+
+In ra chênh lệch lớn nhất có thể. Với $1 \le N \le 2 \cdot 10^5$, $1 \le M \le 3 \cdot 10^5$, $1 \le w, c \le 10^9$.
+
+### Ý tưởng
+Bài này có solution: [https://oj.vnoi.info/problem/bedao_r19_e/editorial](https://oj.vnoi.info/problem/bedao_r19_e/editorial)
+
+Ý tưởng bài này thì dùng lại tương tự cái sắp xếp topo như ở bài 
+[Tunnel](#tunnel).
+
+Sau khi dijkstra DAG xong thì với mỗi đỉnh $u$ lưu:
+
+- $mn_u$: độ cao nhỏ nhất xuất hiện trên một đường đi ngắn nhất từ $1$ tới $u$.
+
+- $mx_u$: độ cao lớn nhất xuất hiện trên một đường đi ngắn nhất từ $1$ tới $u$.
+
+- $dp_u$: chênh lệch độ cao lớn nhất có thể trên một đường đi ngắn nhất từ $1$ tới $u$.
+
+Khi xét cạnh DAG $u \to v$ có độ cao $c$ ta có:
+
+$$
+dp_v = \max(dp_v,\ dp_u,\ c - mn_u,\ mx_u - c)
+$$
+
+$$
+mn_v = \min(mn_v,\ mn_u,\ c)
+$$
+
+$$
+mx_v = \max(mx_v,\ mx_u,\ c)
+$$
+
+Đáp án là $dp_n$. Công thức $dp$ bài này cũng khá dễ.
+### Code AC
+```cpp
+#include <bits/stdc++.h>
+#define pii pair <int, int>
+#define p2i pair <int, pii>
+#define int long long
+#define fi first
+#define se second
+#define endl "\n"
+
+using namespace std;
+
+const int N = 2e5 + 5;
+const int inf = 1e18 + 7;
+
+int n, m;
+vector <p2i> adj[N];
+
+int d1[N], dn[N];
+int mn[N], mx[N], dp[N];
+
+void dijk(int s, int d[]) {
+    priority_queue<pii, vector<pii>, greater<pii>> q;
+
+    for (int i = 1; i <= n; ++i) d[i] = inf;
+    d[s] = 0;
+    q.push(pii(0, s));
+
+    while (q.size()) {
+        int du = q.top().fi, u = q.top().se;
+        q.pop();
+
+        if (du > d[u]) continue;
+
+        for (int i = 0; i < adj[u].size(); ++i) {
+            int v = adj[u][i].fi;
+            int w = adj[u][i].se.fi;
+
+            if (d[v] > d[u] + w) {
+                d[v] = d[u] + w;
+                q.push(pii(d[v], v));
+            }
+        }
+    }
+}
+
+void solve() {
+    cin >> n >> m;
+    for (int i = 1; i <= m; ++i) {
+        int u, v, w, c;
+        cin >> u >> v >> w >> c;
+
+        adj[u].push_back(p2i(v, pii(w, c)));
+        adj[v].push_back(p2i(u, pii(w, c)));
+    }
+
+    dijk(1, d1);
+    dijk(n, dn);
+
+    vector <int> ord;
+    for (int i = 1; i <= n; ++i) {
+        ord.push_back(i);
+        mn[i] = inf;
+        mx[i] = -inf;
+        dp[i] = 0;
+    }
+
+    sort(ord.begin(), ord.end(), [&](int u, int v) {
+        return d1[u] < d1[v];
+    });
+
+    for (int u : ord) {
+        for (int j = 0; j < adj[u].size(); ++j) {
+            int v = adj[u][j].fi;
+            int w = adj[u][j].se.fi;
+            int c = adj[u][j].se.se;
+
+            // u -> v thuoc mot duong di ngan nhat 1 -> n
+            if (d1[u] + w + dn[v] == d1[n]) {
+                if (mn[u] != inf) {
+                    dp[v] = max(dp[v], dp[u]);
+                    dp[v] = max(dp[v], c - mn[u]);
+                    dp[v] = max(dp[v], mx[u] - c);
+                }
+
+                mn[v] = min(mn[v], min(mn[u], c));
+                mx[v] = max(mx[v], max(mx[u], c));
+            }
+        }
+    }
+
+    cout << dp[n];
+}
+
+signed main() {
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    solve();
+    return 0;
+}
+```
+## Mua Hàng
+
+### Tóm tắt
+Có $n$ loại đồ vật, loại thứ $i$ có giá $a_i$ và được mua tối đa $cnt_i$ món. Một cách mua hàng được biểu diễn bởi bộ $b_1, b_2, \ldots, b_n$, trong đó $0 \le b_i \le cnt_i$. Chi phí của một cách mua hàng là:
+
+$$
+\sum_{i = 1}^{n} a_i \times b_i
+$$
+
+Sắp xếp tất cả các cách mua hàng theo chi phí tăng dần. Hãy tìm chi phí của cách mua hàng nhỏ thứ $K$. Với $1 \le n, K \le 2 \cdot 10^5$, $a_i \le 10^9$, $cnt_i < 2 \cdot 10^5$.
+
+### Ý tưởng
+
+Sort các loại đồ vật theo giá tăng dần. Sau đó sinh các cách mua hàng theo tổng chi phí tăng dần. Mỗi state có dạng:
+```
+{tổng chi phí, loại đồ vật lớn nhất đang mua, số lượng loại đó}
+```
+
+Với state đang có loại lớn nhất là $i$ và đang mua $q$ món loại đó, có thể sinh các state mới:
+
+- Mua thêm một món loại $i$ nếu $q < cnt_i$.
+- Mua thêm một món loại $i + 1$.
+- Nếu $q = 1$, thay món loại $i$ bằng một món loại $i + 1$.
+
+Các thao tác trên đều không làm tổng chi phí giảm vì đã sort giá tăng dần. Mỗi lần lấy phần tử nhỏ nhất khỏi priority queue sẽ thu được cách mua hàng có chi phí nhỏ nhất tiếp theo.
+
+Lấy đủ $K$ cách mua hàng thì dừng.
+### Code AC
+
+```cpp
+#include <bits/stdc++.h>
+#define pii pair <int, int>
+#define p2i pair <int, pii>
+#define int long long
+#define fi first
+#define se second
+#define endl "\n"
+
+using namespace std;
+
+const int N = 2e5 + 5;
+const int inf = 1e18 + 7;
+
+int n, k;
+vector <pii> item;
+
+void solve(void) {
+    cin >> n >> k;
+    for (int i = 1; i <= n; ++i) {
+        int a, cnt;
+        cin >> a >> cnt;
+
+        if (cnt > 0) item.push_back(pii(a, cnt));
+    }
+
+    sort(item.begin(), item.end());
+
+    if (k == 1) {
+        cout << 0;
+        return;
+    }
+
+    priority_queue<p2i, vector<p2i>, greater<p2i>> q;
+    q.push(p2i(item[0].fi, pii(0, 1)));
+
+    int states = 1, res = 0;
+    while (states < k && q.size()) {
+        int sum = q.top().fi;
+        int i = q.top().se.fi;
+        int num = q.top().se.se;
+        q.pop();
+
+        ++states;
+        res = sum;
+
+        // mua 1 mon loai i
+        if (num < item[i].se) {
+            q.push(p2i(sum + item[i].fi, pii(i, num + 1)));
+        }
+
+        if (i + 1 < item.size()) {
+            // mua 1 mon loai i + 1
+            q.push(p2i(sum + item[i + 1].fi, pii(i + 1, 1)));
+
+            // thay mon loai i bang 1 mon loai i + 1
+            if (num == 1) {
+                q.push(p2i(sum - item[i].fi + item[i + 1].fi, pii(i + 1, 1)));
+            }
+        }
+    }
+
+    cout << res;
 }
 
 signed main() {
